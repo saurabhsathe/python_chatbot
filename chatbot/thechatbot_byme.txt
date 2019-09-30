@@ -1,0 +1,86 @@
+review.dept
+i would like a hardware.more
+i would like to install a software.more
+i would like to have headphones.admin
+i would like to have a mouse.admin
+i would like to know about xoriant.about
+i would like to contact a xoriant excutive.sales
+i need vpn access.sysnet_h
+my laptop is not working as it should.sysnet_h
+tell me something.about
+who is my manager.personal
+my system is not working.sysnet_h
+how do i raise a ticket for travel expenses?.howto
+how can i file a ticket for travel expenses?.howto
+how many leaves do i have left.personal
+i need mysql to be installed.sysnet_s
+i need get python installed.sysnet_s
+i want to install java.sysnet_s
+who is Ratnesh Rai?.search
+who is Saurabh Sathe?.search
+who is Girish Gaitonde?.search
+who is delivery head?.search
+who is my technical manager?.personal
+the login button is not working.ui
+heyyy i am unable to login.admin
+hello i need a new account.admin
+submit button is not working.ui
+site is not getting loaded.system
+site is down.system
+site is slow.system
+i am facing a problem.more
+i dont understand.more
+tell me something.more
+i need help.more
+
+********************************************************************mainfile
+import numpy as np
+import pandas as pd
+import re
+import nltk
+from nltk.corpus import stopwords
+from nltk.stem.porter import PorterStemmer
+
+
+
+
+dataset=pd.read_csv("dataset_nlp.tsv",delimiter=".",quoting=3)
+nltk.download('stopwords')
+corpus_list=[]
+
+
+
+#cleaning the strings
+for i in range(0,len(dataset)):
+  compl=re.sub("[^a-zA-Z]"," ",dataset["review"][i])
+  compl=compl.lower()
+  compl=compl.split()
+  ps=PorterStemmer()
+  compl =[ps.stem(word) for word in compl if not word in set(stopwords.words("english"))]
+  compl=' '.join(compl)
+  corpus_list.append(compl)
+
+
+
+
+#creating bag of words model
+from sklearn.feature_extraction.text import CountVectorizer
+cv=CountVectorizer(max_features=50)
+X=cv.fit_transform(corpus_list).toarray()
+y=dataset.iloc[:,1].values
+
+print(X)
+
+
+#we need to feature code the dependent variable y since the algorithms only work with numerical data
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+labelencoder_y = LabelEncoder()
+y = labelencoder_y.fit_transform(y)
+
+#lets cross validate
+
+
+#now time for the main part lets apply our favourite models
+from sklearn.ensemble import RandomForestClassifier
+forest=RandomForestClassifier
+**********************************************
